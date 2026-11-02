@@ -19,7 +19,7 @@ the technical terms kept in English so they match the exam and the docs. The qui
 
 | # | Course | Notes | Quiz |
 |---|---|---|---|
-| 1 | MSO Foundations | — | [mso-foundations/quiz.html](mso-foundations/quiz.html) (20 questions) |
+| 1 | MSO Foundations | [mso-foundations/](mso-foundations/) | [quiz.html](mso-foundations/quiz.html) (20 questions) |
 | 2 | Production-Grade Prompting, Agents & Tool Use | [production-grade-prompting/](production-grade-prompting/) | [quiz.html](production-grade-prompting/quiz.html) (24) |
 | 3 | Claude Code, MCP & Integration | [claude-code-mcp-integration/](claude-code-mcp-integration/) | [quiz.html](claude-code-mcp-integration/quiz.html) (27) |
 | 4 | Production Engineering, Evals & Security | [production-engineering-evals-security/](production-engineering-evals-security/) | [quiz.html](production-engineering-evals-security/quiz.html) (26) |
