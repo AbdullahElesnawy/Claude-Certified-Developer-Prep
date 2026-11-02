@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCDV-F Practice Quiz</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --card: #ffffff; --text: #1d1d1b; --muted: #6b6b66; --border: #e2e1dc;
+    --accent: #c15f3c; --accent-soft: #f6e9e3;
+    --ok: #2f7d4f; --ok-soft: #e4f2e9; --bad: #b3372f; --bad-soft: #f8e3e1;
+    --code: #efeee9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1b19; --card: #252523; --text: #ecebe6; --muted: #a09f98; --border: #3a3936;
+      --accent: #e08a68; --accent-soft: #3b2a22;
+      --ok: #6cc28e; --ok-soft: #1f3327; --bad: #ec7d74; --bad-soft: #3d2321;
+      --code: #33322f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-size: .92rem; }
+  h2 { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 32px 0 12px; }
+  .q { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+  .q.ok { border-color: var(--ok); }
+  .q.bad { border-color: var(--bad); }
+  .stem { margin: 0 0 12px; }
+  .num { font-weight: 700; margin-right: 4px; }
+  .hint { display: inline-block; font-size: .78rem; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 1px 8px; margin-left: 6px; }
+  label.opt {
+    display: flex; gap: 10px; align-items: flex-start; padding: 9px 11px; border: 1px solid var(--border);
+    border-radius: 8px; margin-top: 7px; cursor: pointer;
+  }
+  label.opt:hover { border-color: var(--accent); }
+  label.opt input { margin-top: 4px; accent-color: var(--accent); flex-shrink: 0; }
+  label.opt .letter { font-weight: 600; min-width: 1.1em; }
+  label.opt.correct { background: var(--ok-soft); border-color: var(--ok); }
+  label.opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .done label.opt { cursor: default; }
+  code { background: var(--code); border-radius: 4px; padding: 0 4px; font-size: .88em; overflow-wrap: anywhere; }
+  .why { display: none; margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--code); font-size: .92rem; }
+  .done .why { display: block; }
+  .verdict { font-weight: 700; margin-right: 6px; }
+  .ok .verdict { color: var(--ok); } .bad .verdict { color: var(--bad); }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--border);
+    padding: 12px 16px; display: flex; justify-content: center;
+  }
+  .bar-inner { max-width: 760px; width: 100%; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  .progress { color: var(--muted); font-size: .9rem; }
+  button {
+    font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer;
+    background: var(--accent); color: #fff;
+  }
+  button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  #result { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+  #result.show { display: block; }
+  .score { font-size: 2.4rem; font-weight: 800; line-height: 1.1; }
+  .score small { font-size: 1rem; color: var(--muted); font-weight: 500; }
+  .pass { font-weight: 700; margin: 6px 0 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  td { padding: 6px 0; border-top: 1px solid var(--border); }
+  td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+  .note { color: var(--muted); font-size: .85rem; margin-top: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Practice Quiz</h1>
+  <p class="sub">MSO Foundations · 20 questions · original questions in the CCDV-F style, not from the real exam</p>
+
+  <section id="result" aria-live="polite"></section>
+  <form id="quiz"></form>
+</main>
+
+<div class="bar"><div class="bar-inner">
+  <span class="progress" id="progress"></span>
+  <span>
+    <button type="button" class="secondary" id="reset">Reset</button>
+    <button type="button" id="submit">Submit</button>
+  </span>
+</div></div>
+
+<script>
+const QUESTIONS = [
+  { s: "Tokens and context window", q: "A request has a 180K-token prompt and sets `max_tokens` to 64K on a model with a 200K-token context window. What is the problem?",
+    o: ["Nothing; `max_tokens` is unrelated to the context window.",
+        "Input and output share the context window, so 180K input plus up to 64K output exceeds the 200K budget.",
+        "`max_tokens` must always equal the context window size.",
+        "Only output tokens count toward the context window."],
+    a: [1], w: "The context window is a fixed budget shared by the input and the generated output. Plan input size and `max_tokens` together." },
+  { s: "Tokens and context window", q: "Which statement about tokens is correct?",
+    o: ["One token is always exactly one word.",
+        "Tokens are sub-word units; the same text can produce different token counts on different models or languages, so measure with the token-counting endpoint.",
+        "Images and PDFs do not consume tokens.",
+        "Token counts only matter for billing, not for limits."],
+    a: [1], w: "Tokenization varies by model and language, and images and documents consume tokens too. Tokens drive cost, rate limits, and context usage, so count them rather than estimate from words." },
+  { s: "Tokens and context window", q: "A team's average request cost doubled after they added 20 detailed examples to the system prompt. Why?",
+    o: ["Examples are billed as output tokens.",
+        "Every example is sent as input tokens on every request, so the per-request input grew.",
+        "The model thinks longer when it sees examples.",
+        "System prompts are billed at double rate."],
+    a: [1], w: "Everything in the prompt is resent and billed on each request because the API is stateless. Prompt caching can cut the cost of a stable prefix like this." },
+  { s: "Tokens and context window", q: "A chatbot's quality drops late in long conversations, even though the context window is not full. What is the most likely cause?",
+    o: ["The model runs out of output tokens.",
+        "Accumulated, mostly irrelevant history dilutes the context, so important instructions and facts get less attention.",
+        "The API silently truncates conversations after 10 turns.",
+        "Temperature increases with conversation length."],
+    a: [1], w: "Filling the context with stale content reduces quality before the hard limit is reached. Treat the context as a budget and manage it (summarize, prune, isolate)." },
+
+  { s: "Sampling and non-determinism", q: "Why can the same prompt produce different outputs on repeated calls?",
+    o: ["The model retrains between calls.",
+        "Generation samples each next token from a probability distribution, so outputs can vary run to run.",
+        "The API randomly changes the system prompt.",
+        "Network latency changes the answer."],
+    a: [1], w: "LLMs generate token by token by sampling from a distribution. That sampling is the source of variation between runs." },
+  { s: "Sampling and non-determinism", q: "What does non-determinism mean for testing an LLM feature?",
+    o: ["Tests are impossible, so skip them.",
+        "Run each eval case multiple times and measure pass rates; assert properties (valid schema, allowed category) rather than exact text.",
+        "Set temperature to 0 and assert exact string equality; this guarantees identical outputs.",
+        "Test only once per release."],
+    a: [1], w: "Even low-temperature settings do not guarantee identical outputs. Measure rates over repeated runs and check properties instead of exact strings." },
+  { s: "Sampling and non-determinism", q: "A developer compares two prompts by running each once on 5 cases. Prompt B scores 5/5 and Prompt A 4/5. What is the right conclusion?",
+    o: ["Prompt B is clearly better; ship it.",
+        "The difference may be noise; run a larger eval set, with repeated runs, before concluding.",
+        "Prompt A is better because it failed less confidently.",
+        "Evals can't compare prompts."],
+    a: [1], w: "With so few cases and single runs, one flip is within normal variation. A meaningful comparison needs more cases and repeated runs." },
+
+  { s: "Model family and reasoning", q: "A high-volume, latency-sensitive support classifier sorts tickets into five categories. Which model tier is the natural starting point?",
+    o: ["The most capable model at maximum effort.",
+        "A fast, low-cost tier (Haiku class), validated with an eval.",
+        "Whichever model has the longest context window.",
+        "A different model for every request."],
+    a: [1], w: "Simple, high-volume, latency-sensitive tasks fit the small fast tier. Confirm the quality with an eval rather than assuming." },
+  { s: "Model family and reasoning", q: "Which statement correctly distinguishes model choice from reasoning mode?",
+    o: ["They are the same setting.",
+        "Model choice picks the capability tier (Opus, Sonnet, Haiku); reasoning mode (extended or adaptive thinking, effort) controls how much the chosen model reasons before answering.",
+        "Extended thinking switches the request to a larger model.",
+        "Reasoning mode only changes the output format."],
+    a: [1], w: "They are independent levers. You can run a smaller model with more reasoning, or a larger model with less, and each changes cost and quality differently." },
+  { s: "Model family and reasoning", q: "A team wants better results on a hard multi-step planning task without changing models. What should they try first?",
+    o: ["Raise temperature.",
+        "Enable or increase reasoning (extended or adaptive thinking, higher effort) and measure the quality and cost change.",
+        "Shorten the prompt to one sentence.",
+        "Remove all instructions."],
+    a: [1], w: "More reasoning helps multi-step tasks, at the cost of more output tokens and latency. Measure the change instead of assuming it helps." },
+  { s: "Model family and reasoning", q: "Which tradeoffs typically come with moving to a larger model tier or higher reasoning effort?",
+    o: ["Higher cost per task.",
+        "Higher latency.",
+        "Guaranteed deterministic output.",
+        "Potentially better quality on complex tasks."],
+    a: [0, 1, 3], w: "Bigger models and more reasoning usually cost more and take longer, in exchange for better results on hard tasks. Neither makes output deterministic." },
+  { s: "Model family and reasoning", q: "Production code references a model alias that can point to newer model versions over time. Output quality suddenly changes. What practice prevents this?",
+    o: ["Always use the newest model automatically.",
+        "Pin a specific model version in production and upgrade deliberately after running evals.",
+        "Avoid using model IDs.",
+        "Lower `max_tokens`."],
+    a: [1], w: "New model versions can change behavior. Pinning a version and upgrading only after evals keeps changes intentional." },
+
+  { s: "Zero, one, and multi-shot", q: "When is zero-shot prompting usually the best choice?",
+    o: ["When the output format is unusual and must be followed exactly.",
+        "When the task is simple and well described by instructions alone, and you want to minimize tokens.",
+        "When the model keeps misclassifying edge cases.",
+        "Never; examples always help."],
+    a: [1], w: "Zero-shot is cheapest. Add examples when instructions alone don't produce the right format or behavior." },
+  { s: "Zero, one, and multi-shot", q: "A model follows the instructions but output style and format drift between responses. What is the most effective addition?",
+    o: ["A few diverse examples (multi-shot) showing the exact expected format, wrapped in example tags.",
+        "A higher temperature.",
+        "Repeating the instruction three times in capitals.",
+        "A larger context window."],
+    a: [0], w: "Examples are the strongest way to pin down format and tone. Make them varied so the model does not copy incidental details." },
+  { s: "Zero, one, and multi-shot", q: "What is the main risk of using several near-identical examples in a multi-shot prompt?",
+    o: ["The API rejects duplicate examples.",
+        "The model over-fits to incidental details of the examples (same length, same topic) instead of the intended pattern.",
+        "Examples are ignored if there are more than two.",
+        "It disables streaming."],
+    a: [1], w: "Examples teach by pattern. If they all share an incidental trait, the model copies that trait. Diverse examples teach the real rule." },
+  { s: "Zero, one, and multi-shot", q: "What is the cost tradeoff of adding examples to a prompt?",
+    o: ["Examples are free because they are in the system prompt.",
+        "Examples add input tokens to every request; they often improve quality, and prompt caching can reduce their recurring cost.",
+        "Examples increase only output tokens.",
+        "Examples reduce cost because responses become shorter."],
+    a: [1], w: "Each example is resent as input on every call. Weigh the quality gain against that cost, and cache a stable prefix." },
+
+  { s: "Access patterns", q: "Why do most teams use the official SDK rather than raw REST calls to the Messages API?",
+    o: ["Raw REST is not supported.",
+        "The SDK wraps the same REST API and adds typed requests and responses, built-in retries for retriable errors, streaming helpers, and typed error classes.",
+        "The SDK uses a different, faster model.",
+        "The SDK does not need an API key."],
+    a: [1], w: "The SDK and REST hit the same API. The SDK adds conveniences such as typing, retries, streaming helpers, and error classes; raw REST suits languages without an SDK or shell scripts." },
+  { s: "Access patterns", q: "A chat UI shows a blank screen for 20 seconds while a long answer is generated. What is the best change?",
+    o: ["Switch to the Batches API.",
+        "Use streaming so text appears as it is generated.",
+        "Lower the context window.",
+        "Retry the request."],
+    a: [1], w: "Streaming improves time to first token and perceived latency. It also avoids HTTP timeouts on long responses." },
+  { s: "Access patterns", q: "A backend must process 5,000 independent requests within an hour, as cheaply as practical. Results are needed within the hour, not instantly. Which approach fits?",
+    o: ["Send them one at a time, synchronously.",
+        "Use an async client with a concurrency limit that respects rate limits, retrying 429s with backoff.",
+        "Open 5,000 parallel requests at once.",
+        "Use streaming for each request."],
+    a: [1], w: "Async requests with bounded concurrency finish within the window without hammering rate limits. If a 24-hour window were acceptable, the Batches API would be cheaper." },
+  { s: "Access patterns", q: "Which workloads fit the Message Batches API?",
+    o: ["Nightly classification of 100,000 product reviews.",
+        "A live customer chat.",
+        "Running an eval suite of 10,000 cases overnight.",
+        "An agent that needs each tool result before choosing the next step."],
+    a: [0, 2], w: "Batches suit large, independent, latency-tolerant jobs at about half the cost. Interactive chat and step-by-step agent loops need real-time responses." },
+];
+
+const LETTERS = "ABCDEFGH";
+const form = document.getElementById("quiz");
+const resultEl = document.getElementById("result");
+const progressEl = document.getElementById("progress");
+const submitBtn = document.getElementById("submit");
+
+function esc(t) {
+  return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function fmt(t) {
+  return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
+function render() {
+  let html = "", section = "";
+  QUESTIONS.forEach((item, i) => {
+    if (item.s !== section) { section = item.s; html += `<h2>${esc(section)}</h2>`; }
+    const multi = item.a.length > 1;
+    const type = multi ? "checkbox" : "radio";
+    html += `<div class="q" id="q${i}"><p class="stem"><span class="num">Q${i + 1}.</span>${fmt(item.q)}` +
+      (multi ? `<span class="hint">Select ${item.a.length}</span>` : "") + `</p>`;
+    item.o.forEach((opt, j) => {
+      html += `<label class="opt"><input type="${type}" name="q${i}" value="${j}">` +
+        `<span class="letter">${LETTERS[j]}.</span><span>${fmt(opt)}</span></label>`;
+    });
+    html += `<div class="why"></div></div>`;
+  });
+  form.innerHTML = html;
+}
+
+function answered() {
+  return QUESTIONS.filter((_, i) => form.querySelector(`input[name="q${i}"]:checked`)).length;
+}
+function updateProgress() {
+  progressEl.textContent = `${answered()} / ${QUESTIONS.length} answered`;
+}
+
+// Enforce the "Select N" limit on multiple-response questions.
+form.addEventListener("change", (e) => {
+  const input = e.target;
+  if (input.type === "checkbox") {
+    const i = Number(input.name.slice(1));
+    const checked = form.querySelectorAll(`input[name="${input.name}"]:checked`);
+    if (checked.length > QUESTIONS[i].a.length) input.checked = false;
+  }
+  updateProgress();
+});
+
+function grade() {
+  const missing = QUESTIONS.length - answered();
+  if (missing > 0 && !confirm(`${missing} question(s) unanswered. Submit anyway?`)) return;
+
+  let correct = 0;
+  const bySection = {};
+  QUESTIONS.forEach((item, i) => {
+    const box = document.getElementById(`q${i}`);
+    const picked = [...form.querySelectorAll(`input[name="q${i}"]:checked`)].map((el) => Number(el.value));
+    const right = picked.length === item.a.length && item.a.every((v) => picked.includes(v));
+    if (right) correct++;
+    bySection[item.s] = bySection[item.s] || { c: 0, t: 0 };
+    bySection[item.s].t++;
+    if (right) bySection[item.s].c++;
+
+    box.classList.add("done", right ? "ok" : "bad");
+    box.querySelectorAll("label.opt").forEach((label, j) => {
+      const isAnswer = item.a.includes(j);
+      if (isAnswer) label.classList.add("correct");
+      else if (picked.includes(j)) label.classList.add("wrong");
+    });
+    const key = item.a.map((v) => LETTERS[v]).join(", ");
+    box.querySelector(".why").innerHTML =
+      `<span class="verdict">${right ? "Correct." : "Incorrect."}</span>Answer: <b>${key}</b>. ${fmt(item.w)}`;
+  });
+  form.querySelectorAll("input").forEach((el) => (el.disabled = true));
+
+  const pct = Math.round((correct / QUESTIONS.length) * 100);
+  const pass = pct >= 72;
+  let rows = "";
+  for (const [name, r] of Object.entries(bySection)) {
+    rows += `<tr><td>${esc(name)}</td><td>${r.c} / ${r.t}</td></tr>`;
+  }
+  resultEl.innerHTML =
+    `<div class="score">${correct} / ${QUESTIONS.length} <small>(${pct}%)</small></div>` +
+    `<div class="pass" style="color: var(${pass ? "--ok" : "--bad"})">${pass ? "Above" : "Below"} the 72% practice line</div>` +
+    `<table>${rows}</table>` +
+    `<p class="note">The real exam reports a scaled score (pass = 720 on 100–1,000), which is not the same as percent correct. 72% here is only a rough practice target. Scroll down to review each answer.</p>`;
+  resultEl.classList.add("show");
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = .5;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function reset() {
+  render();
+  resultEl.classList.remove("show");
+  resultEl.innerHTML = "";
+  submitBtn.disabled = false;
+  submitBtn.style.opacity = 1;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+submitBtn.addEventListener("click", grade);
+document.getElementById("reset").addEventListener("click", reset);
+render();
+updateProgress();
+</script>
+</body>
+</html>
