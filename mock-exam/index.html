@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock Exam</title>
+<link rel="stylesheet" href="../assets/quiz.css">
+</head>
+<body>
+<script src="../mso-foundations/questions.js"></script>
+<script src="../production-grade-prompting/questions.js"></script>
+<script src="../claude-code-mcp-integration/questions.js"></script>
+<script src="../production-engineering-evals-security/questions.js"></script>
+<script src="../accelerators-ip-contribution/questions.js"></script>
+<script src="../assets/quiz.js"></script>
+<script>
+  // How many questions each exam domain gets: 53 questions split by the official
+  // domain weights (largest-remainder rounding).
+  const QUOTAS = {
+    "Applications and Integration": 17,
+    "Model Selection and Optimization": 9,
+    "Agents and Workflows": 8,
+    "Prompt and Context Engineering": 6,
+    "Tools and MCPs": 6,
+    "Security and Safety": 4,
+    "Claude Code": 2,
+    "Eval, Testing, and Debugging": 1,
+  };
+
+  // Which exam domain each quiz section counts toward. Approximate: the quizzes are
+  // organised by course, and the exam by domain.
+  const SECTION_DOMAIN = {
+    "mso:Tokens and context window": "Model Selection and Optimization",
+    "mso:Sampling and non-determinism": "Model Selection and Optimization",
+    "mso:Model family and reasoning": "Model Selection and Optimization",
+    "mso:Zero, one, and multi-shot": "Prompt and Context Engineering",
+    "mso:Access patterns": "Model Selection and Optimization",
+    "prompting:Prompting": "Prompt and Context Engineering",
+    "prompting:Extended thinking": "Model Selection and Optimization",
+    "prompting:Tool use": "Tools and MCPs",
+    "prompting:Streaming": "Applications and Integration",
+    "prompting:Context engineering": "Agents and Workflows",
+    "prompting:Agents": "Agents and Workflows",
+    "prompting:Memory": "Agents and Workflows",
+    "prompting:Multimodal and batch": "Applications and Integration",
+    "claude-code:Workflow and permissions": "Claude Code",
+    "claude-code:Reviewing AI code": "Applications and Integration",
+    "claude-code:Project context": "Applications and Integration",
+    "claude-code:Skills, commands, plugins": "Tools and MCPs",
+    "claude-code:MCP servers": "Tools and MCPs",
+    "claude-code:Enterprise integration": "Security and Safety",
+    "evals-security:Evals": "Eval, Testing, and Debugging",
+    "evals-security:Testing and tracing": "Eval, Testing, and Debugging",
+    "evals-security:Resilience": "Eval, Testing, and Debugging",
+    "evals-security:Cost, latency, reliability": "Model Selection and Optimization",
+    "evals-security:Security": "Security and Safety",
+    "accelerators:Accelerators": "Applications and Integration",
+    "accelerators:Contributing": "Applications and Integration",
+    "accelerators:Platforms and versioning": "Applications and Integration",
+    "accelerators:Platform comparison": "Applications and Integration",
+    "accelerators:Multi-deployment": "Security and Safety",
+  };
+
+  const IDS_KEY = "ccdvf-mock:ids";
+  const pool = [];
+  for (const [bank, qs] of Object.entries(QUIZ_BANK)) {
+    qs.forEach((q, i) => {
+      const d = SECTION_DOMAIN[`${bank}:${q.s}`];
+      if (d) pool.push({ ...q, d, id: `${bank}:${i}` });
+    });
+  }
+
+  function draw() {
+    const picked = [];
+    for (const [domain, n] of Object.entries(QUOTAS)) {
+      const candidates = pool.filter((q) => q.d === domain).sort(() => Math.random() - 0.5);
+      picked.push(...candidates.slice(0, n).map((q) => q.id));
+    }
+    return picked;
+  }
+
+  let ids = null;
+  try { ids = JSON.parse(localStorage.getItem(IDS_KEY)); } catch { /* storage unavailable */ }
+  if (!Array.isArray(ids) || !ids.every((id) => pool.some((q) => q.id === id))) {
+    ids = draw();
+    try { localStorage.setItem(IDS_KEY, JSON.stringify(ids)); } catch { /* storage unavailable */ }
+  }
+  const questions = ids.map((id) => pool.find((q) => q.id === id));
+
+  Quiz.mount({
+    title: "Mock Exam",
+    subtitle: `${questions.length} questions · 120 minutes · weighted by the official exam domains · original questions, not from the real exam`,
+    backHref: "../index.html",
+    storageKey: "ccdvf-mock:state",
+    questions,
+    groupBy: null,
+    scoreBy: "d",
+    shuffleQuestions: true,
+    timerMinutes: 120,
+    onReset: () => { try { localStorage.removeItem(IDS_KEY); } catch { /* storage unavailable */ } },
+    intro: `
+      <p>This runs like the real exam: <b>53 questions in 120 minutes</b>, with the number of questions per domain
+      matching the official weights. Answers and explanations appear only after you submit, or when time runs out.</p>
+      <ul>
+        <li>Questions come from the five course quizzes, so some will be familiar if you've done them.</li>
+        <li>Your answers and the timer are saved in this browser; you can close the tab and come back.</li>
+        <li>"Start over" draws a new set of questions.</li>
+        <li>The results show a score per domain, which is the most useful part: it tells you what to review.</li>
+      </ul>`,
+  });
+</script>
+</body>
+</html>

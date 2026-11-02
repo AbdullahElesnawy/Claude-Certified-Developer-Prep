@@ -25,9 +25,16 @@ the technical terms kept in English so they match the exam and the docs. The qui
 | 4 | Production Engineering, Evals & Security | [production-engineering-evals-security/](production-engineering-evals-security/) | [quiz.html](production-engineering-evals-security/quiz.html) (26) |
 | 5 | Accelerators & IP Contribution | [accelerators-ip-contribution/](accelerators-ip-contribution/) | [quiz.html](accelerators-ip-contribution/quiz.html) (25) |
 
+| — | **Mock exam**: 53 questions, 120-minute timer, weighted by the exam domains | — | [mock-exam/](mock-exam/index.html) |
+
 Each notes folder has a `README.md`, one file per course objective, and an `exam-traps` file with a cheat sheet.
-Each quiz is a single HTML file: open it in a browser, answer, and press **Submit** to see your score per section
-and the reasoning for every answer. Nothing is installed and nothing leaves your machine.
+Each quiz opens in a browser: answer, press **Submit**, and see your score per section and the reasoning for every
+answer. Answer order is shuffled on each attempt, and your progress is saved in your browser. Nothing leaves your
+machine.
+
+When you've finished the courses, take the **mock exam**. It runs like the real one (53 questions, 120 minutes,
+per-domain question counts from the official weights) and shows your score per domain at the end, which tells you
+what to review before booking.
 
 ## Exam at a glance
 
