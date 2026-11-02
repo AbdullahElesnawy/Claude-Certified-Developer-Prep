@@ -46,6 +46,8 @@ function page({ title, body, rel, rtl }) {
   const up = depth ? "../".repeat(depth) : "./";
   const nav = [`<a href="${up}index.html">Home</a>`]
     .concat(COURSES.map(([dir, label]) => `<a href="${up}${dir}/index.html">${escapeHtml(label)}</a>`))
+    .concat(fs.existsSync(path.join(ROOT, "extra-topics")) ? `<a href="${up}extra-topics/index.html">Extra topics</a>` : [])
+    .concat(fs.existsSync(path.join(ROOT, "BLUEPRINT.md")) ? `<a href="${up}BLUEPRINT.html">Blueprint checklist</a>` : [])
     .concat(fs.existsSync(path.join(ROOT, "mock-exam")) ? `<a href="${up}mock-exam/index.html">Mock exam</a>` : [])
     .join("");
   return `<!doctype html>
