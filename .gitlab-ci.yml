@@ -1,0 +1,11 @@
+# Publishes the notes and quizzes as a static site with GitLab Pages.
+pages:
+  image: node:20-alpine
+  script:
+    - npm ci --no-audit --no-fund
+    - npm run build
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

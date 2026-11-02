@@ -1,0 +1,11 @@
+{
+  "name": "claude-certified-developer-prep",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs"
+  },
+  "devDependencies": {
+    "marked": "12.0.2"
+  }
+}
