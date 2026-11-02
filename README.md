@@ -84,3 +84,7 @@ From the official exam guide (version 1.0, July 2026):
 - **The prep courses don't cover everything.** The exam guide says no single resource guarantees a pass. Areas
   that need extra reading include general software engineering, agentic frameworks named in the guide
   (LangGraph, Strands, PydanticAI), and running Claude through Bedrock, Vertex AI, and Foundry.
+
+## Contributing
+
+Found a mistake or want to add questions? See [CONTRIBUTING.md](CONTRIBUTING.md).
