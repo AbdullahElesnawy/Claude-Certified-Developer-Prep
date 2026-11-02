@@ -1,93 +1,75 @@
-# Claude Certified Developer Prep
+# Claude Certified Developer – Foundations: Study Notes
 
+Study notes and practice quizzes I used to prepare for Anthropic's **Claude Certified Developer – Foundations**
+exam (code **CCDV-F**). I passed on 1 November 2026 with a scaled score of 808 (the pass mark is 720).
 
+The notes follow the five courses in Anthropic's official prep path. They are written in Egyptian Arabic, with
+the technical terms kept in English so they match the exam and the docs. The quizzes are in English.
 
-## Getting started
+## Start here
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+1. Read the official **exam guide** first. It is the only authoritative description of what the exam covers:
+   [Exam Guide (PDF)](https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542875%2FClaude+Certified+Developer+%E2%80%93+Foundations+Exam+Guide.pdf).
+2. Take the official prep courses on the [Anthropic Partner Academy](https://anthropic-partners.skilljar.com/path/claude-certified-developer-foundations).
+   They are free.
+3. After each course, read the matching notes folder below, then open its `quiz.html` in a browser.
+4. Book the exam from the [certification page](https://anthropic-partners.skilljar.com/claude-certified-developer-foundations-certification).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Contents
 
-## Add your files
+| # | Course | Notes | Quiz |
+|---|---|---|---|
+| 1 | MSO Foundations | — | [mso-foundations/quiz.html](mso-foundations/quiz.html) (20 questions) |
+| 2 | Production-Grade Prompting, Agents & Tool Use | [production-grade-prompting/](production-grade-prompting/) | [quiz.html](production-grade-prompting/quiz.html) (24) |
+| 3 | Claude Code, MCP & Integration | [claude-code-mcp-integration/](claude-code-mcp-integration/) | [quiz.html](claude-code-mcp-integration/quiz.html) (27) |
+| 4 | Production Engineering, Evals & Security | [production-engineering-evals-security/](production-engineering-evals-security/) | [quiz.html](production-engineering-evals-security/quiz.html) (26) |
+| 5 | Accelerators & IP Contribution | [accelerators-ip-contribution/](accelerators-ip-contribution/) | [quiz.html](accelerators-ip-contribution/quiz.html) (25) |
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Each notes folder has a `README.md`, one file per course objective, and an `exam-traps` file with a cheat sheet.
+Each quiz is a single HTML file: open it in a browser, answer, and press **Submit** to see your score per section
+and the reasoning for every answer. Nothing is installed and nothing leaves your machine.
 
-```
-cd existing_repo
-git remote add origin https://git.clouding.ai/abdallah.elesnawy/claude-certified-developer-prep.git
-git branch -M main
-git push -uf origin main
-```
+## Exam at a glance
 
-## Integrate with your tools
+From the official exam guide (version 1.0, July 2026):
 
-* [Set up project integrations](https://git.clouding.ai/abdallah.elesnawy/claude-certified-developer-prep/-/settings/integrations)
+| | |
+|---|---|
+| Questions | 53, multiple choice and multiple response |
+| Time | 120 minutes |
+| Pass mark | 720 on a 100–1,000 scaled score |
+| Fee | $125 |
+| Delivery | Pearson VUE, online proctored or test center |
+| Validity | 12 months; on-time renewal is a free, unproctored assessment |
 
-## Collaborate with your team
+| Domain | Weight |
+|---|---|
+| Applications and Integration | 33.1% |
+| Model Selection and Optimization | 16.8% |
+| Agents and Workflows | 14.7% |
+| Prompt and Context Engineering | 11.0% |
+| Tools and MCPs | 10.6% |
+| Security and Safety | 8.1% |
+| Claude Code | 3.1% |
+| Eval, Testing, and Debugging | 2.6% |
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## After you pass
 
-## Test and Deploy
+- The result can show as **In Progress** in the Pearson VUE exam history for a while after the exam.
+- The badge and certificate come from **Credly** by email, not from Pearson VUE. Accept the badge there,
+  download the PDF certificate, and share it to LinkedIn from Credly.
+- If the badge doesn't arrive, check spam, then contact Pearson VUE support (for results) or Credly support
+  (for badges).
 
-Use the built-in continuous integration in GitLab.
+## Read this before using the notes
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- **These are not exam questions.** Every quiz question here was written for practice in the style of the
+  official sample questions. Candidates accept a non-disclosure agreement before the exam; please don't add
+  real exam content to this repository.
+- **The notes were built from each course's learning objectives and the official Anthropic docs**, not copied
+  from the lessons. If a lesson says something different, trust the lesson.
+- **API details change.** Model names, feature availability per platform, and beta features were checked in
+  October 2026. Verify against the current docs before relying on them in real work.
+- **The prep courses don't cover everything.** The exam guide says no single resource guarantees a pass. Areas
+  that need extra reading include general software engineering, agentic frameworks named in the guide
+  (LangGraph, Strands, PydanticAI), and running Claude through Bedrock, Vertex AI, and Foundry.
