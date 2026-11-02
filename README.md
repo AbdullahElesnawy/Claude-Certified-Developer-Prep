@@ -3,6 +3,9 @@
 Study notes and practice quizzes I used to prepare for Anthropic's **Claude Certified Developer – Foundations**
 exam (code **CCDV-F**). I passed on 1 November 2026 with a scaled score of 808 (the pass mark is 720).
 
+**Read it online:** https://abdullahelesnawy.github.io/Claude-Certified-Developer-Prep/ (notes, quizzes, and the
+mock exam, no setup needed).
+
 The notes follow the five courses in Anthropic's official prep path. They are written in Egyptian Arabic, with
 the technical terms kept in English so they match the exam and the docs. The quizzes are in English.
 
